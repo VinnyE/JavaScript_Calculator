@@ -27,4 +27,16 @@ var calculator = {
 
 };
 
-var num = [1, '+', 3, '-', 2, '*', 1];
+var buttonListener = document.getElementsByClassName('button-container')[0];
+var screenShow = document.getElementById('screen');
+
+buttonListener.addEventListener('click', function(e) {
+  var target = e.target.textContent;
+  screenShow.textContent += target;
+});
+
+
+function displayNumbers(e) {
+  var target = e.target;
+  console.log(target);
+}

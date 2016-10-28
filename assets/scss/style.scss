@@ -10,20 +10,35 @@ body {
 }
 
 .calculator {
-  background: darken($silverChalice, 15%);
+  background: darken($silverChalice, 42%);
   width: $calculatorWidth;
   height: $calculatorHeight;
   margin: 10% auto 0;
-  border-radius: .35em;
+  border-radius: $border-radius;
   box-shadow: 10px 20px 20px rgba(0,0,0, 0.3);
 }
 .calculator-screen {
   background: darken($silverChalice, 42%);
   width: $calculatorWidth;
   height: $calculatorHeight * .25;
+  border-top-left-radius: $border-radius;
+  border-top-right-radius: $border-radius;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
 }
+span {
+  font-size: 1.75rem;
+  color: $lynch;
+  margin-right: 10.5%;
+  text-align: right;
+}
+
 .button-container {
   min-height: 75%;
+  border-bottom-right-radius: $border-radius;
+  border-bottom-left-radius: $border-radius;
   display: flex;
   flex-wrap: wrap;
 }
@@ -36,10 +51,16 @@ button {
   font-size: 1.25rem;
   background: darken($silverChalice, 40%);
   color: $lynch;
+  transition: all 0.2s ease;
+  &:active {
+    background: darken($silverChalice, 30%);
+  }
 }
 button:nth-child(17) {
   flex-basis: 0;
+  border-bottom-left-radius: $border-radius;
 }
 button:last-child {
   flex-grow: 2;
+  border-bottom-right-radius: $border-radius;
 }
