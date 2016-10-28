@@ -1,0 +1,45 @@
+@import "_reset.scss";
+@import "_config.scss";
+
+html {
+  font-size: 1rem;
+}
+body {
+  background: $cuttySark;
+  font-family: $font-stack;
+}
+
+.calculator {
+  background: darken($silverChalice, 15%);
+  width: $calculatorWidth;
+  height: $calculatorHeight;
+  margin: 10% auto 0;
+  border-radius: .35em;
+  box-shadow: 10px 20px 20px rgba(0,0,0, 0.3);
+}
+.calculator-screen {
+  background: darken($silverChalice, 42%);
+  width: $calculatorWidth;
+  height: $calculatorHeight * .25;
+}
+.button-container {
+  min-height: 75%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+button {
+  flex: 1 25%;
+  padding: 0;
+  outline: none;
+  border: none;
+  font-size: 1.25rem;
+  background: darken($silverChalice, 40%);
+  color: $lynch;
+}
+button:nth-child(17) {
+  flex-basis: 0;
+}
+button:last-child {
+  flex-grow: 2;
+}
