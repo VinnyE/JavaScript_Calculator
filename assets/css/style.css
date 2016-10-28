@@ -73,9 +73,15 @@ body {
 
 span {
   font-size: 1.75rem;
+  text-align: right;
   color: #6F889C;
-  margin-right: 10.5%;
-  text-align: right; }
+  margin-right: 10%;
+  margin-left: 10%;
+  max-width: 80%;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; }
 
 .button-container {
   min-height: 75%;

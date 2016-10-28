@@ -30,9 +30,15 @@ body {
 }
 span {
   font-size: 1.75rem;
-  color: $lynch;
-  margin-right: 10.5%;
   text-align: right;
+  color: $lynch;
+  margin-right: 10%;
+  margin-left: 10%;
+  max-width: 80%;
+  display: block;
+  white-space: nowrap;
+  overflow:hidden;
+  text-overflow: ellipsis;
 }
 
 .button-container {

@@ -1,42 +1,79 @@
 var displayResult = document.getElementById('display-result');
 
-var calculator = {
-  add: function(a, b) {
-    var result = a + b;
-    displayResult.textContent = result;
-  },
-
-  subtract: function(a, b) {
-    var result = a - b;
-    displayResult.textContent = result;
-  },
-
-  multiply: function(a, b) {
-    var result = a * b;
-    displayResult.textContent = result;
-  },
-
-  divide: function(a, b) {
-    var result = a / b;
-    displayResult.textContent = result;
-  },
-
-  clear: function() {
-    displayResult.textContent = 0;
-  }
+var data = {
+  total: []
 
 };
 
-var buttonListener = document.getElementsByClassName('button-container')[0];
-var screenShow = document.getElementById('screen');
+var view = {
+  buttonContainer: document.getElementsByClassName('button-container')[0],
 
-buttonListener.addEventListener('click', function(e) {
-  var target = e.target.textContent;
-  screenShow.textContent += target;
-});
+  screenNumberDisplay: document.getElementById('screen-number-display')
 
+};
 
-function displayNumbers(e) {
-  var target = e.target;
-  console.log(target);
-}
+var controls = {
+
+  checkForOperators: function(e, current, screenNumberDisplay) {
+    if (e.target.textContent === 'CE') {
+      screenNumberDisplay.textContent = 0;
+      return true;
+    } else if (e.target.textContent === 'AC') {
+        screenNumberDisplay.textContent = 0;
+        data.total = [];
+      return true;
+    } else if (e.target.textContent === '+') {
+        data.total.push(current);
+        data.total.push('+');
+        screenNumberDisplay.textContent = '+';
+      return true;
+    } else if (e.target.textContent === '-') {
+        data.total.push(current);
+        data.total.push('-');
+        screenNumberDisplay.textContent = '-';
+      return true;
+    } else if (e.target.textContent === 'x') {
+        data.total.push(current);
+        data.total.push('*');
+        screenNumberDisplay.textContent = 'x';
+      return true;
+    } else if (e.target.textContent === '÷') {
+        data.total.push(current);
+        data.total.push('/');
+        screenNumberDisplay.textContent = '÷';
+      return true;
+    } else {
+        return false;
+    }
+  },
+
+  buttonListener: function() {
+    var screenNumberDisplay = view.screenNumberDisplay;
+    var self = this;
+
+    view.buttonContainer.addEventListener('click', function(e) {
+      var current = screenNumberDisplay.textContent;
+
+      // Check if pressed button is an operator
+      if(self.checkForOperators(e, current, screenNumberDisplay)) {
+        return;
+      }
+
+      if (screenNumberDisplay.textContent.length > 9) {
+        screenNumberDisplay.textContent = 'Limit Exceeded!';
+      } else {
+          if (screenNumberDisplay.textContent.startsWith('0') || screenNumberDisplay.textContent.startsWith('+') || screenNumberDisplay.textContent.startsWith('-') || screenNumberDisplay.textContent.startsWith('x') ||
+          screenNumberDisplay.textContent.startsWith('÷') ) {
+            screenNumberDisplay.textContent = e.target.textContent;
+            current = screenNumberDisplay.textContent;
+
+         } else {
+            screenNumberDisplay.textContent += e.target.textContent;
+            current = screenNumberDisplay.textContent;
+         }
+      }
+    });
+  }
+
+};
+controls.buttonListener();
