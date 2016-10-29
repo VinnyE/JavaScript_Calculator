@@ -65,8 +65,10 @@ var controls = {
       return true;
     } else if (e.target.textContent === '+') {
         if (operatorPrecedesCalculation()) {
+          console.log('operator');
           return true;
         }
+        console.log('not called');
         data.valuesInMemory.push(current);
         data.valuesInMemory.push('+');
         screenNumberDisplay.textContent = '+';
@@ -118,10 +120,21 @@ var controls = {
 
     view.buttonContainer.addEventListener('click', function(e) {
       var current = screenNumberDisplay.textContent;
-
+      var targetValue = e.target.textContent;
+      
+      console.log(current);
       if (data.valuesInMemory.length === 0 && current === '0') {
         if (e.target.textContent === '.') {
           screenNumberDisplay.textContent = '0.';
+          return;
+        } // if e.target
+      } else if(current === '0.') {
+        if (e.target.textContent === '.') {
+          return;
+        } else if (e.target.textContent === '+' || e.target.textContent === '-' || e.target.textContent === 'x' || e.target.textContent === '÷') {
+          return;
+        } else {
+          screenNumberDisplay.textContent += e.target.textContent;
           return;
         }
       }
@@ -131,7 +144,6 @@ var controls = {
           return;
         }
 
-      // console.log(current);
       // This conditional will first check if value on screen was a result.
       // If it's a result, and next value is an operator:
         // follow normal conditionals for operators above
@@ -142,6 +154,12 @@ var controls = {
       if (screenNumberDisplay.classList.contains('calculated')) {
         if (self.checkForOperators(e, current, screenNumberDisplay)) {
           screenNumberDisplay.classList.remove('calculated');
+        } else if (current[0] === '0' && current[1] === '.') {
+          if (e.target.textContent === '+') {
+            return;
+          }
+            screenNumberDisplay.textContent += e.target.textContent;
+            screenNumberDisplay.classList.remove('calculated');
         } else {
         screenNumberDisplay.textContent = e.target.textContent;
         screenNumberDisplay.classList.remove('calculated');
@@ -160,8 +178,8 @@ var controls = {
             screenNumberDisplay.textContent += e.target.textContent;
          }
       }
-    });
-  }
+    }); // function(e)
+  } // button listener
 
 };
 
