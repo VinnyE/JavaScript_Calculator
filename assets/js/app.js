@@ -23,10 +23,16 @@ var controls = {
     // Push the operator into array.
     // Display the operator on screen.
   checkForOperators: function(e, current, screenNumberDisplay) {
+    var targetValue = e.target.textContent;
 
+    if (targetValue === 'x') {
+      targetValue = '*';
+    } else if (targetValue === '÷') {
+      targetValue = '/';
+    }
     // Ignore input if operator was pressed twice.
-    // console.log(current);
-    if (e.target.textContent === data.valuesInMemory[data.valuesInMemory.length-1]) {
+    if (targetValue === data.valuesInMemory[data.valuesInMemory.length-1] &&
+        current === data.valuesInMemory[data.valuesInMemory.length-1]) {
       return true;
     }
 
@@ -37,14 +43,14 @@ var controls = {
       }
     }
 
-    if (e.target.textContent === 'CE') {
+    if (targetValue === 'CE') {
       screenNumberDisplay.textContent = 0;
       return true;
-    } else if (e.target.textContent === 'AC') {
+    } else if (targetValue === 'AC') {
         screenNumberDisplay.textContent = 0;
         data.valuesInMemory = [];
       return true;
-    } else if (e.target.textContent === '=') {
+    } else if (targetValue === '=') {
         data.valuesInMemory.push(current);
         // Convert the array holding all of the values to a string.
         var valuesInMemoryExpression = data.valuesInMemory.join('');
@@ -63,35 +69,33 @@ var controls = {
         }
 
       return true;
-    } else if (e.target.textContent === '+') {
+    } else if (targetValue === '+') {
         if (operatorPrecedesCalculation()) {
-          console.log('operator');
           return true;
         }
-        console.log('not called');
         data.valuesInMemory.push(current);
         data.valuesInMemory.push('+');
         screenNumberDisplay.textContent = '+';
         return true;
-    } else if (e.target.textContent === '-') {
-      if (operatorPrecedesCalculation()) {
-        return true;
+    } else if (targetValue === '-') {
+        if (operatorPrecedesCalculation()) {
+          return true;
       }
         data.valuesInMemory.push(current);
         data.valuesInMemory.push('-');
         screenNumberDisplay.textContent = '-';
         return true;
-    } else if (e.target.textContent === 'x') {
-      if (operatorPrecedesCalculation()) {
-        return true;
+    } else if (targetValue === '*') {
+        if (operatorPrecedesCalculation()) {
+          return true;
       }
         data.valuesInMemory.push(current);
         data.valuesInMemory.push('*');
         screenNumberDisplay.textContent = 'x';
         return true;
-    } else if (e.target.textContent === '÷') {
-      if (operatorPrecedesCalculation()) {
-        return true;
+    } else if (targetValue === '/') {
+        if (operatorPrecedesCalculation()) {
+          return true;
       }
         data.valuesInMemory.push(current);
         data.valuesInMemory.push('/');
@@ -113,7 +117,7 @@ var controls = {
     }
 
   },
-
+  // listen for input
   buttonListener: function() {
     var screenNumberDisplay = view.screenNumberDisplay;
     var self = this;
@@ -121,21 +125,36 @@ var controls = {
     view.buttonContainer.addEventListener('click', function(e) {
       var current = screenNumberDisplay.textContent;
       var targetValue = e.target.textContent;
-      
-      console.log(current);
+
+      // Swap operators to actual JS recognized operators.
+      if (current === 'x') {
+        current = '*';
+      } else if (current === '÷') {
+        current = '/';
+      }
+
+      // 1. If the only current value is 0, and input is '.'
+        // Allow decimal to be placed next to 0, rather than clear screen.
+      // 2. If the only current value is '0.'
+        // Assume user wants to begin a decimal calculation
+        // Do not allow invalid syntax (ex. 0.., 0.+, 0.x, etc);
+        // If input is a # (valid syntax), add it to the screen.
       if (data.valuesInMemory.length === 0 && current === '0') {
-        if (e.target.textContent === '.') {
+        if (targetValue === '.') {
           screenNumberDisplay.textContent = '0.';
           return;
-        } // if e.target
+        }
       } else if(current === '0.') {
-        if (e.target.textContent === '.') {
-          return;
-        } else if (e.target.textContent === '+' || e.target.textContent === '-' || e.target.textContent === 'x' || e.target.textContent === '÷') {
-          return;
+          if (targetValue === '.') {
+            return;
+        } else if (targetValue === '+' ||
+                  targetValue === '-' ||
+                  targetValue === 'x' ||
+                  targetValue === '÷') {
+            return;
         } else {
-          screenNumberDisplay.textContent += e.target.textContent;
-          return;
+            screenNumberDisplay.textContent += targetValue;
+            return;
         }
       }
 
@@ -154,15 +173,12 @@ var controls = {
       if (screenNumberDisplay.classList.contains('calculated')) {
         if (self.checkForOperators(e, current, screenNumberDisplay)) {
           screenNumberDisplay.classList.remove('calculated');
-        } else if (current[0] === '0' && current[1] === '.') {
-          if (e.target.textContent === '+') {
-            return;
-          }
-            screenNumberDisplay.textContent += e.target.textContent;
+        } else if (current[0] === '0' && current[1] === '.') {      
+            screenNumberDisplay.textContent += targetValue;
             screenNumberDisplay.classList.remove('calculated');
         } else {
-        screenNumberDisplay.textContent = e.target.textContent;
-        screenNumberDisplay.classList.remove('calculated');
+            screenNumberDisplay.textContent = targetValue;
+            screenNumberDisplay.classList.remove('calculated');
         }
         return;
      }
@@ -173,13 +189,13 @@ var controls = {
       } else {
           // If leading character is an operator or 0, remove and set number.
           if (self.checkFirstChar(screenNumberDisplay)) {
-            screenNumberDisplay.textContent = e.target.textContent;
+            screenNumberDisplay.textContent = targetValue;
          } else {
-            screenNumberDisplay.textContent += e.target.textContent;
+            screenNumberDisplay.textContent += targetValue;
          }
       }
-    }); // function(e)
-  } // button listener
+    });
+  }
 
 };
 
