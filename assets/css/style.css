@@ -101,13 +101,11 @@ button {
   transition: all 0.2s ease; }
   button:active {
     background: #555555; }
-
-button:nth-child(17) {
-  flex-basis: 0;
-  border-bottom-left-radius: 0.25em; }
-
-button:last-child {
-  flex-grow: 2;
-  border-bottom-right-radius: 0.25em; }
+  button:nth-child(17) {
+    flex-basis: 0;
+    border-bottom-left-radius: 0.25em; }
+  button:last-child {
+    flex-grow: 2;
+    border-bottom-right-radius: 0.25em; }
 
 /*# sourceMappingURL=style.css.map */

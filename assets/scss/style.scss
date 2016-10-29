@@ -61,12 +61,12 @@ button {
   &:active {
     background: darken($silverChalice, 30%);
   }
-}
-button:nth-child(17) {
-  flex-basis: 0;
-  border-bottom-left-radius: $border-radius;
-}
-button:last-child {
-  flex-grow: 2;
-  border-bottom-right-radius: $border-radius;
+  &:nth-child(17) {
+    flex-basis: 0;
+    border-bottom-left-radius: $border-radius;
+  }
+  &:last-child {
+    flex-grow: 2;
+    border-bottom-right-radius: $border-radius;
+  }
 }
