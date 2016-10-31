@@ -42,15 +42,17 @@ span {
 }
 
 .button-container {
-  min-height: 75%;
+  height: 75%;
   border-bottom-right-radius: $border-radius;
   border-bottom-left-radius: $border-radius;
-  display: flex;
-  flex-wrap: wrap;
+
 }
 
 button {
-  flex: 1 25%;
+  display: block;
+  float: left;
+  width: $calculatorWidth  / 4;
+  height: $calculatorHeight * .75 / 5 ;
   padding: 0;
   outline: none;
   border: none;
@@ -62,11 +64,11 @@ button {
     background: darken($silverChalice, 30%);
   }
   &:nth-child(17) {
-    flex-basis: 25%;
+    // flex-basis: 25%;
     border-bottom-left-radius: $border-radius;
   }
   &:last-child {
-    flex-basis: 75%;
+    width: $calculatorWidth / 4 * 3;
     border-bottom-right-radius: $border-radius;
   }
 }
