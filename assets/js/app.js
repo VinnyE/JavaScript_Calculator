@@ -16,7 +16,6 @@ var view = {
 
 var controls = {
 
-  // Function that checks if pressed key is an operator
   // First three conditions ('CE', 'AC', '='), all have specialized functions.
   // Rest of the conditions:
     // Push current value that's on screen into array.
@@ -43,14 +42,21 @@ var controls = {
       }
     }
 
+    function insertData(valueOnScreen, operator) {
+      data.valuesInMemory.push(valueOnScreen);
+      data.valuesInMemory.push(operator);
+    }
+
     switch (targetValue) {
       case 'CE':
         screenNumberDisplay.textContent = 0;
         return true;
+
       case 'AC':
         screenNumberDisplay.textContent = 0;
         data.valuesInMemory = [];
         return true;
+
       case '=':
         data.valuesInMemory.push(current);
         // Convert the array holding all of the values to a string.
@@ -70,38 +76,39 @@ var controls = {
         }
 
         return true;
+
         case '+':
         if (operatorPrecedesCalculation()) {
           return true;
         }
-        data.valuesInMemory.push(current);
-        data.valuesInMemory.push('+');
-        screenNumberDisplay.textContent = '+';
+          insertData(current, '+');
+          screenNumberDisplay.textContent = '+';
         return true;
+
         case '-':
           if (operatorPrecedesCalculation()) {
             return true;
         }
-          data.valuesInMemory.push(current);
-          data.valuesInMemory.push('-');
+          insertData(current, '-');
           screenNumberDisplay.textContent = '-';
           return true;
+
         case '*':
           if (operatorPrecedesCalculation()) {
             return true;
         }
-          data.valuesInMemory.push(current);
-          data.valuesInMemory.push('*');
+          insertData(current, '*');
           screenNumberDisplay.textContent = 'x';
           return true;
+
         case '/':
           if (operatorPrecedesCalculation()) {
             return true;
         }
-          data.valuesInMemory.push(current);
-          data.valuesInMemory.push('/');
+          insertData(current, '/');
           screenNumberDisplay.textContent = '÷';
           return true;
+
         default:
           return false;
     }
@@ -110,12 +117,8 @@ var controls = {
   // Check the first character on calculator screen.
     // If it's ONLY 0 (meaning no decimal) OR (+,-,x,/) next input will set screen.
   checkFirstChar: function(screenNumberDisplay) {
-    if ((screenNumberDisplay.textContent.startsWith('0') && screenNumberDisplay.textContent.length === 1) ||
-        screenNumberDisplay.textContent.startsWith('+') ||
-        screenNumberDisplay.textContent.startsWith('-') ||
-        screenNumberDisplay.textContent.startsWith('x') ||
-        screenNumberDisplay.textContent.startsWith('÷')) {
-          return true;
+    if ((screenNumberDisplay.startsWith('0') && screenNumberDisplay.length === 1) || /^(\+|\-|x|÷)/.test(screenNumberDisplay)) {
+      return true;
     }
 
   },
@@ -151,10 +154,10 @@ var controls = {
       } else if(current === '0.') {
           if (targetValue === '.') {
             return;
-        } else if (targetValue === '+' ||
-                  targetValue === '-' ||
-                  targetValue === 'x' ||
-                  targetValue === '÷') {
+        } else if (/(\+|\-|x|÷)/.test(targetValue)) {
+            return;
+        } else if (/(AC)|(CE)/.test(targetValue)) {
+            self.checkForOperators(e, current, screenNumberDisplay);
             return;
         } else {
             screenNumberDisplay.textContent += targetValue;
@@ -167,7 +170,6 @@ var controls = {
           return;
         }
 
-      // This conditional will first check if value on screen was a result.
       // If it's a result, and next value is an operator:
         // follow normal conditionals for operators above
         // remove calculated class, as next value starts a new computation.
@@ -192,7 +194,7 @@ var controls = {
         screenNumberDisplay.textContent = 'Limit Exceeded!';
       } else {
           // If leading character is an operator or 0, remove and set number.
-          if (self.checkFirstChar(screenNumberDisplay)) {
+          if (self.checkFirstChar(screenNumberDisplay.textContent)) {
             screenNumberDisplay.textContent = targetValue;
          } else {
             screenNumberDisplay.textContent += targetValue;
