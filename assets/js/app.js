@@ -43,14 +43,15 @@ var controls = {
       }
     }
 
-    if (targetValue === 'CE') {
-      screenNumberDisplay.textContent = 0;
-      return true;
-    } else if (targetValue === 'AC') {
+    switch (targetValue) {
+      case 'CE':
+        screenNumberDisplay.textContent = 0;
+        return true;
+      case 'AC':
         screenNumberDisplay.textContent = 0;
         data.valuesInMemory = [];
-      return true;
-    } else if (targetValue === '=') {
+        return true;
+      case '=':
         data.valuesInMemory.push(current);
         // Convert the array holding all of the values to a string.
         var valuesInMemoryExpression = data.valuesInMemory.join('');
@@ -68,8 +69,8 @@ var controls = {
           screenNumberDisplay.classList.add('calculated');
         }
 
-      return true;
-    } else if (targetValue === '+') {
+        return true;
+        case '+':
         if (operatorPrecedesCalculation()) {
           return true;
         }
@@ -77,33 +78,34 @@ var controls = {
         data.valuesInMemory.push('+');
         screenNumberDisplay.textContent = '+';
         return true;
-    } else if (targetValue === '-') {
-        if (operatorPrecedesCalculation()) {
+        case '-':
+          if (operatorPrecedesCalculation()) {
+            return true;
+        }
+          data.valuesInMemory.push(current);
+          data.valuesInMemory.push('-');
+          screenNumberDisplay.textContent = '-';
           return true;
-      }
-        data.valuesInMemory.push(current);
-        data.valuesInMemory.push('-');
-        screenNumberDisplay.textContent = '-';
-        return true;
-    } else if (targetValue === '*') {
-        if (operatorPrecedesCalculation()) {
+        case '*':
+          if (operatorPrecedesCalculation()) {
+            return true;
+        }
+          data.valuesInMemory.push(current);
+          data.valuesInMemory.push('*');
+          screenNumberDisplay.textContent = 'x';
           return true;
-      }
-        data.valuesInMemory.push(current);
-        data.valuesInMemory.push('*');
-        screenNumberDisplay.textContent = 'x';
-        return true;
-    } else if (targetValue === '/') {
-        if (operatorPrecedesCalculation()) {
+        case '/':
+          if (operatorPrecedesCalculation()) {
+            return true;
+        }
+          data.valuesInMemory.push(current);
+          data.valuesInMemory.push('/');
+          screenNumberDisplay.textContent = '÷';
           return true;
-      }
-        data.valuesInMemory.push(current);
-        data.valuesInMemory.push('/');
-        screenNumberDisplay.textContent = '÷';
-        return true;
-    } else {
-        return false;
+        default:
+          return false;
     }
+
 },
   // Check the first character on calculator screen.
     // If it's ONLY 0 (meaning no decimal) OR (+,-,x,/) next input will set screen.
@@ -119,10 +121,12 @@ var controls = {
   },
   // listen for input
   buttonListener: function() {
+    // Reference to span element (screen).
     var screenNumberDisplay = view.screenNumberDisplay;
     var self = this;
 
     view.buttonContainer.addEventListener('click', function(e) {
+      // Set text content of span element to current.
       var current = screenNumberDisplay.textContent;
       var targetValue = e.target.textContent;
 
@@ -173,7 +177,7 @@ var controls = {
       if (screenNumberDisplay.classList.contains('calculated')) {
         if (self.checkForOperators(e, current, screenNumberDisplay)) {
           screenNumberDisplay.classList.remove('calculated');
-        } else if (current[0] === '0' && current[1] === '.') {      
+        } else if (current[0] === '0' && current[1] === '.') {
             screenNumberDisplay.textContent += targetValue;
             screenNumberDisplay.classList.remove('calculated');
         } else {
